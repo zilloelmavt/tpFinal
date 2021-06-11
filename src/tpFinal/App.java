@@ -70,6 +70,7 @@ public class App {
 			int maxVidaEnemigo = 0, maxEnemigoAtaque = 0, posibilidadRecompensa = 0;
 			int[] propiedadesEnemigos;
 			String enemigo = "";
+			int opcion = 0;
 
 			// Seteo de cada partida
 			switch (nivel) {
@@ -124,7 +125,7 @@ public class App {
 
 				// Defino la acción de lo que va a hacer el usuario de a cuerdo a lo que escriba
 				// en la próxima linea.
-				int opcion = scanner.nextInt();
+				opcion = scanner.nextInt();
 
 				// Pelea.
 				if (opcion == 1) {
@@ -178,7 +179,7 @@ public class App {
 
 				// Huye.
 				if (opcion == 3) {
-					System.out.println("Huiste del" + enemigo + " :(");
+					System.out.println("Huiste del " + enemigo + " :(");
 					subEstado = PELEA_FINALIZADA;
 				}
 			}
@@ -200,7 +201,7 @@ public class App {
 					}
 						
 					if(siguienteNivel.equalsIgnoreCase("s")) {
-						if (nivel < 3) {
+						if (nivel < 3 && opcion != 3) {
 							nivel = nivel + 1;
 						}
 						subEstado = PELEANDO;
