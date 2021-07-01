@@ -7,18 +7,19 @@ public class App {
 
 	public static void main(String[] args) {
 
-		// Estados del loop
-		String CORRIENDO = "corriendo";
-		String FINALIZADO = "finalizado";
-		String PELEANDO = "peleando";
-		String PELEA_FINALIZADA = "peleaFinalizada";
+		// Estados de los loops
+		// Loop principal
+		String  CORRIENDO = "corriendo",
+				FINALIZADO = "finalizado",
+		// Loop secundario
+				PELEANDO = "peleando",
+				PELEA_FINALIZADA = "peleaFinalizada";
 
 		// Instancias
 		Scanner scanner = new Scanner(System.in);
 		Random rand = new Random();
 
-		// Personajes
-		String[] clases = { "Guerrero", "Hechizero", "Asesino" };
+		// Enemigos
 		String[][] enemigos = { 
 			{ "Esqueleto", "Bandido", "Lobo" }, 
 			{ "Troll", "Orco", "Zombie" },
@@ -26,51 +27,42 @@ public class App {
 		};
 
 		// Variables del juego
-		String estadoPrincipal;
-		String subEstado;
+		String 	estadoPrincipal,
+				subEstado,
+				siguienteNivel;
 		int nivel = 1;
-		String siguienteNivel;
 
 		// Max vida, max ataque y posibilidad de soltar una recompensa cuando se muere.
 		int[][] propiedadesEnemigosPorNivel = { { 50, 20, 70 }, { 85, 30, 25 }, { 120, 40, 10 } };
 
 		// Variables de personaje
-		String nombrePersonaje;
-		String aceptaNombre;
+		String 	nombrePersonaje;
 
 		// Propiedades
-		int vida = 100;
-		int pociones = 2;
-		int vidaPocion = 30;
-		int tipo;
-		int maxAtaque = 30;
+		int vida = 100,
+			pociones = 2,
+			vidaPocion = 30,
+			maxAtaque = 30;
+		
+		imprimirEnConsola("¡Bienvenido a una nueva aventura!", "-");
 
-		System.out.println("#-----------------------------------#");
-		System.out.println("# ¡Bienvenido a una nueva aventura! #");
-		System.out.println("#-----------------------------------#\n");
-
-		// Loop para definir el nombre del jugador. No sale del ciclo hasta que el
+		// Funcion para definir el nombre del jugador. No sale del ciclo hasta que el
 		// usuario presione "s".
-		do {
-			System.out.println("> ¿Cuál es tu nombre aventurero?");
-			nombrePersonaje = scanner.nextLine();
-			System.out.println("> Tu nombre es " + nombrePersonaje + ". ¿Esto es correcto? (S/N)");
-			aceptaNombre = scanner.nextLine();
-		} while (!aceptaNombre.equalsIgnoreCase("S"));
-
+		nombrePersonaje = crearPersonaje(scanner);
+		
 		// Cambio el estado del juego a "corriendo" para que comience el loop.
 		estadoPrincipal = CORRIENDO;
 
-		System.out.println("###########################################################################");
-		System.out.println("> Tu aventura comienza aquí. Encontraste una cueva y decidiste explorarla.");
-		System.out.println("###########################################################################\n");
-
+		imprimirEnConsola("> Tu aventura comienza aquí. Encontraste una cueva y decidiste explorarla.", "#");
+		
 		// Loop principal del juego.
 		while (estadoPrincipal.equals(CORRIENDO)) {
-			int maxVidaEnemigo = 0, maxEnemigoAtaque = 0, posibilidadRecompensa = 0;
+			int maxVidaEnemigo = 0, 
+				maxEnemigoAtaque = 0, 
+				posibilidadRecompensa = 0,
+				opcion = 0;
 			int[] propiedadesEnemigos;
 			String enemigo = "";
-			int opcion = 0;
 
 			// Seteo de cada partida
 			switch (nivel) {
@@ -106,16 +98,16 @@ public class App {
 			while (subEstado.equals(PELEANDO)) {
 
 				// Muestra info del personaje.
-				System.out.println("#-----------------------------------#");
-				System.out.println("> Tu nombre es " + nombrePersonaje);
-				System.out.println("> Tu salud es: " + vida);
+				imprimirLinea(50, "-");
+				System.out.println("> " + nombrePersonaje);
+				System.out.println("> Salud: " + vida);
 				System.out.println("> Tenés: " + pociones + " pociones curativas.");
 
 				// Muestra info del enemigo.
-				System.out.println("#-----------------------------------#");
+				imprimirLinea(50, "-");
 				System.out.println("> " + enemigo);
 				System.out.println("> Salud: " + maxVidaEnemigo);
-				System.out.println("#-----------------------------------#\n");
+				imprimirLinea(50, "-");
 
 				// Muestra las opciones
 				System.out.println("> ¿Que querés hacer?");
@@ -134,10 +126,10 @@ public class App {
 					vida = vida - danioEnemigo;
 					maxVidaEnemigo = maxVidaEnemigo - danio;
 
-					System.out.println("#-----------------------------------#");
+					imprimirLinea(50, "-");
 					System.out.println("> El enemigo recibió " + danio + " puntos de daño.");
 					System.out.println("> Recibiste " + danioEnemigo + " puntos de daño.");
-					System.out.println("#-----------------------------------#");
+					imprimirLinea(50, "-");
 
 					if (maxVidaEnemigo <= 0) {
 						System.out.println("> " + enemigo + " murió.");
@@ -147,8 +139,9 @@ public class App {
 							System.out.println("> El enemigo soltó una poción.");
 							pociones++;
 						}
-						System.out.println("#-----------------------------------#\n");
-
+						
+						imprimirLinea(50, "-");
+						
 						// Finaliza el loop.
 						subEstado = PELEA_FINALIZADA;
 					}
@@ -161,7 +154,8 @@ public class App {
 
 				// Toma una poción.
 				if (opcion == 2) {
-					System.out.println("#-----------------------------------#");
+					imprimirLinea(50, "-");
+					
 					if (pociones > 0) {
 						// Recupera vida pero el enemigo tambien ataca.
 						int danioEnemigo = rand.nextInt(maxEnemigoAtaque);
@@ -174,7 +168,7 @@ public class App {
 					} else {
 						System.out.println("> No tienes más pociones.");
 					}
-					System.out.println("#-----------------------------------#\n");
+					imprimirLinea(50, "-");
 				}
 
 				// Huye.
@@ -186,14 +180,10 @@ public class App {
 			
 			if(vida > 0) {
 				if (nivel == 3) {
-					System.out.println("#-----------------------------------#");
-					System.out.println("Derrotaste todos los enemigos y saliste ileso de la cueva.");
-					System.out.println("#-----------------------------------#\n");
+					imprimirEnConsola("Derrotaste todos los enemigos y saliste ileso de la cueva.", "-");
 					estadoPrincipal = FINALIZADO;
 				} else {
-					System.out.println("#-----------------------------------#");
-					System.out.println("¿Querés seguir con el siguiente nivel? S/N");
-					System.out.println("#-----------------------------------#");
+					imprimirEnConsola("¿Querés seguir con el siguiente nivel? S/N", "-");
 					siguienteNivel = scanner.nextLine();
 
 					while (!siguienteNivel.equalsIgnoreCase("s") && !siguienteNivel.equalsIgnoreCase("n")) {
@@ -205,48 +195,54 @@ public class App {
 							nivel = nivel + 1;
 						}
 						subEstado = PELEANDO;
-						
-						System.out.println("#-----------------------------------#");
-						System.out.println("Seguís al siguiente nivel de la cueva.");
-						System.out.println("#-----------------------------------#\n");
+						imprimirEnConsola("Seguís al siguiente nivel de la cueva.", "-");
 					} else if (siguienteNivel.equalsIgnoreCase("n")) {
 						estadoPrincipal = FINALIZADO;
+						imprimirEnConsola("Saliste ileso de la cueva.", "-");
 						
-						System.out.println("#-----------------------------------#");
-						System.out.println("Saliste ileso de la cueva.");
-						System.out.println("#-----------------------------------#\n");
 					}
 				}
 			} else {
-				System.out.println("#-----------------------------------#");
-				System.out.println("Los enemigos te derrotaron.");
-				System.out.println("#-----------------------------------#\n");
+				imprimirEnConsola("Los enemigos te derrotaron.", "-");
 				estadoPrincipal = FINALIZADO;
 			}
 		}
 
+		imprimirEnConsola("GAME OVER", "-");
 		scanner.close();
-
-		// Selección de la clase
-//		System.out.println("Seleccione un personaje:");
-//		System.out.println("\t> Presione 1 para Guerrero");
-//		System.out.println("\t> Presione 2 para Mago");
-//		System.out.println("\t> Presione 3 para Arquero");
-//		
-//		tipo = Integer.parseInt(scanner.nextLine()) - 1;
-//		
-//		switch(type) {
-//			case 1:
-//				break;
-//			case 2:
-//				break;
-//			case 3:
-//				break;
-//			default:
-//				break;
-//		}
-
-//		System.out.println(clases[type]);
+	}
+	
+	public static void imprimirEnConsola(String mensaje, String caracter) {
+		int largo = mensaje.length() + 2;
+		
+		imprimirLinea(largo, caracter);
+		System.out.println("# " + mensaje + " #");
+		imprimirLinea(largo, caracter);
+	}
+	
+	public static void imprimirLinea(int largo, String caracter) {
+		String linea = "#";
+		
+		for(int i = 0; i < largo; i++) {
+			linea += caracter;
+		}
+		
+		linea += "#";
+		
+		System.out.println(linea);
 	}
 
+	public static String crearPersonaje(Scanner scanner) {
+		String 	nombrePersonaje, 
+				aceptaNombre;
+		
+		do {
+			System.out.println("> ¿Cuál es tu nombre aventurero?");
+			nombrePersonaje = scanner.nextLine();
+			System.out.println("> Tu nombre es " + nombrePersonaje + ". ¿Esto es correcto? (S/N)");
+			aceptaNombre = scanner.nextLine();
+		} while (!aceptaNombre.equalsIgnoreCase("S"));
+		
+		return nombrePersonaje;
+	}
 }
