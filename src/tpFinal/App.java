@@ -42,7 +42,7 @@ public class App {
 		int vida = 100,
 			pociones = 2,
 			vidaPocion = 30,
-			maxAtaque = 30;
+			puntosMaximosDeAtaque = 30;
 		
 		imprimirEnConsola("¡Bienvenido a una nueva aventura!", "-");
 
@@ -57,8 +57,8 @@ public class App {
 		
 		// Loop principal del juego.
 		while (estadoPrincipal.equals(CORRIENDO)) {
-			int maxVidaEnemigo = 0, 
-				maxEnemigoAtaque = 0, 
+			int maximaVidaEnemigo = 0, 
+				ataqueMaximoEnemigo = 0, 
 				posibilidadRecompensa = 0,
 				opcion = 0;
 			int[] propiedadesEnemigos;
@@ -68,22 +68,22 @@ public class App {
 			switch (nivel) {
 				case 1:
 					propiedadesEnemigos = propiedadesEnemigosPorNivel[0];
-					maxVidaEnemigo = rand.nextInt(propiedadesEnemigos[0]);
-					maxEnemigoAtaque = rand.nextInt(propiedadesEnemigos[1]);
+					maximaVidaEnemigo = rand.nextInt(propiedadesEnemigos[0]);
+					ataqueMaximoEnemigo = rand.nextInt(propiedadesEnemigos[1]);
 					posibilidadRecompensa = rand.nextInt(propiedadesEnemigos[2]);
 					enemigo = enemigos[0][rand.nextInt(enemigos[0].length)];
 					break;
 				case 2:
 					propiedadesEnemigos = propiedadesEnemigosPorNivel[1];
-					maxVidaEnemigo = rand.nextInt(propiedadesEnemigos[0]) + 50;
-					maxEnemigoAtaque = rand.nextInt(propiedadesEnemigos[1]) + 10;
+					maximaVidaEnemigo = rand.nextInt(propiedadesEnemigos[0]) + 50;
+					ataqueMaximoEnemigo = rand.nextInt(propiedadesEnemigos[1]) + 10;
 					posibilidadRecompensa = rand.nextInt(propiedadesEnemigos[2]);
 					enemigo = enemigos[1][rand.nextInt(enemigos[1].length)];
 					break;
 				case 3:
 					propiedadesEnemigos = propiedadesEnemigosPorNivel[2];
-					maxVidaEnemigo = rand.nextInt(propiedadesEnemigos[0]) + 80;
-					maxEnemigoAtaque = rand.nextInt(propiedadesEnemigos[1]) + 15;
+					maximaVidaEnemigo = rand.nextInt(propiedadesEnemigos[0]) + 80;
+					ataqueMaximoEnemigo = rand.nextInt(propiedadesEnemigos[1]) + 15;
 					posibilidadRecompensa = rand.nextInt(propiedadesEnemigos[2]);
 					enemigo = enemigos[2][rand.nextInt(enemigos[2].length)];
 					break;
@@ -106,7 +106,7 @@ public class App {
 				// Muestra info del enemigo.
 				imprimirLinea(50, "-");
 				System.out.println("> " + enemigo);
-				System.out.println("> Salud: " + maxVidaEnemigo);
+				System.out.println("> Salud: " + maximaVidaEnemigo);
 				imprimirLinea(50, "-");
 
 				// Muestra las opciones
@@ -121,17 +121,17 @@ public class App {
 
 				// Pelea.
 				if (opcion == 1) {
-					int danio = rand.nextInt(maxAtaque);
-					int danioEnemigo = rand.nextInt(maxEnemigoAtaque);
+					int danio = rand.nextInt(puntosMaximosDeAtaque);
+					int danioEnemigo = rand.nextInt(ataqueMaximoEnemigo);
 					vida = vida - danioEnemigo;
-					maxVidaEnemigo = maxVidaEnemigo - danio;
+					maximaVidaEnemigo = maximaVidaEnemigo - danio;
 
 					imprimirLinea(50, "-");
 					System.out.println("> El enemigo recibió " + danio + " puntos de daño.");
 					System.out.println("> Recibiste " + danioEnemigo + " puntos de daño.");
 					imprimirLinea(50, "-");
 
-					if (maxVidaEnemigo <= 0) {
+					if (maximaVidaEnemigo <= 0) {
 						System.out.println("> " + enemigo + " murió.");
 
 						// Mecanica para soltar una pocion.
@@ -158,7 +158,7 @@ public class App {
 					
 					if (pociones > 0) {
 						// Recupera vida pero el enemigo tambien ataca.
-						int danioEnemigo = rand.nextInt(maxEnemigoAtaque);
+						int danioEnemigo = rand.nextInt(ataqueMaximoEnemigo);
 						vida = vida + vidaPocion;
 						pociones--;
 						vida = vida - danioEnemigo;
@@ -199,7 +199,6 @@ public class App {
 					} else if (siguienteNivel.equalsIgnoreCase("n")) {
 						estadoPrincipal = FINALIZADO;
 						imprimirEnConsola("Saliste ileso de la cueva.", "-");
-						
 					}
 				}
 			} else {
